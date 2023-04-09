@@ -1,9 +1,19 @@
 import mongoose from 'mongoose'; // load mongoose library
 // create schema
 const schema = mongoose.Schema({
-                                 tuit: String, // tuit property of type String
-                                 likes: Number, // likes property of type Number
-                                 liked: Boolean, // liked property of type boolean
+                                 topic: String,
+                                 userName: String,
+                                 time: String,
+                                 title: String,
+                                 image: String,
+                                 replies: Number,
+                                 retuits: Number,
+                                 handle: String,
+                                 tuit: String,
+                                 likes: Number,
+                                 liked: Boolean,
+                                 dislikes: Number,
+                                 disliked: Boolean,
                                }, {collection: 'tuits'}); // collection name where tuits are stored in tuiter database
 export default schema;
 

@@ -2,6 +2,24 @@
 // let tuits = posts;
 import * as tuitsDao from './tuits-dao.js';
 
+const currentUser = {
+  "userName": "WebDev",
+  "handle": "@webdev",
+  "image": "brain.gjpg",
+};
+
+const templateTuit = {
+  ...currentUser,
+  "topic": "Space",
+  "time": "2h",
+  "liked": false,
+  "likes": 0,
+  "disliked": false,
+  "dislikes": 0,
+  "replies": 0,
+  "retuits": 0,
+}
+
 const findTuits = async (req, res) => {
   const tuits = await tuitsDao.findTuits()
   res.json(tuits);
