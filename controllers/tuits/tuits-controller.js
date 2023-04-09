@@ -1,6 +1,6 @@
 // import posts from "./tuits.js";
 // let tuits = posts;
-import * as tuitsDao from '../../tuits/tuits-dao.js';
+import * as tuitsDao from 'tuits-dao.js';
 
 const createTuit = async (req, res) => {
   const newTuit = req.body; // retrieve data from HTTP body
@@ -12,14 +12,15 @@ const createTuit = async (req, res) => {
 
   // tuits.push(newTuit);
   const insertedTuit = await tuitsDao
-      .createTuit(insertedTuit);
+      .createTuit(newTuit);
 
   res.json(newTuit); // respond with actual inserted tuit
 }
 
-const findTuits = async (req, res) =>
+const findTuits = async (req, res) => {
     const tuits = await tuitsDao.findTuits();
     res.json(tuits);
+}
 
 const updateTuit = async (req, res) => {
   const tuitdIdToUpdate = req.params.tid; // get ID of tuit to update
