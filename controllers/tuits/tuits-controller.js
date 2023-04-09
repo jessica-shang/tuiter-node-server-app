@@ -1,48 +1,31 @@
 // import posts from "./tuits.js";
 // let tuits = posts;
-import * as tuitsDao from 'tuits-dao.js';
-
-const createTuit = async (req, res) => {
-  const newTuit = req.body; // retrieve data from HTTP body
-  // ID is created by database instead:
-  // newTuit._id = (new Date()).getTime()+'';
-
-  newTuit.likes = 0; // initialize likes counter
-  newTuit.liked = false; // initialize liked flag
-
-  // tuits.push(newTuit);
-  const insertedTuit = await tuitsDao
-      .createTuit(newTuit);
-
-  res.json(newTuit); // respond with actual inserted tuit
-}
+import * as tuitsDao from './tuits-dao.js';
 
 const findTuits = async (req, res) => {
-    const tuits = await tuitsDao.findTuits();
-    res.json(tuits);
+  const tuits = await tuitsDao.findTuits()
+  res.json(tuits);
+}
+
+const createTuit = async (req, res) => {
+  const newTuit = req.body;
+  newTuit.likes = 0;
+  newTuit.liked = false;
+  const insertedTuit = await tuitsDao.createTuit(newTuit);
+  res.json(insertedTuit);
 }
 
 const updateTuit = async (req, res) => {
-  const tuitdIdToUpdate = req.params.tid; // get ID of tuit to update
-  const updates = req.body; // get updates from HTTP body
-  // const tuitIndex = tuits.findIndex((t) => t._id === tuitdIdToUpdate)
-  // tuits[tuitIndex] = {...tuits[tuitIndex], ...updates};
-
-  const status = await tuitsDao // reports success or failure
-      .updateTuit(tuitdIdToUpdate,
-                  updates);
-
-  res.json(status); // respond with status object
+  const tuitdIdToUpdate = req.params.tid;
+  const updates = req.body;
+  const status = await tuitsDao.updateTuit(tuitdIdToUpdate, updates);
+  res.json(status);
 }
 
-
 const deleteTuit = async (req, res) => {
-  const tuitdIdToDelete = req.params.tid; // retrieve ID of tuit we want to remove
-  const status = await tuitsDao
-      .deleteTuit(tuitdIdToDelete);
-  // tuits = tuits.filter((t) =>
-                           // t._id !== tuitdIdToDelete);
-  res.json(status); // respond with status object
+  const tuitdIdToDelete = req.params.tid;
+  const status = await tuitsDao.deleteTuit(tuitdIdToDelete);
+  res.json(status);
 }
 
 export default (app) => {
