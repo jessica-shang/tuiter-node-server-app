@@ -1,34 +1,47 @@
-import posts from "./tuits.js";
-let tuits = posts;
+// import posts from "./tuits.js";
+// let tuits = posts;
+import * as tuitsDao from '../../tuits/tuits-dao.js';
 
-const createTuit = (req, res) => {
+const createTuit = async (req, res) => {
   const newTuit = req.body; // retrieve data from HTTP body
-  newTuit._id = (new Date()).getTime()+''; // add _id field as a time stamp
+  // ID is created by database instead:
+  // newTuit._id = (new Date()).getTime()+'';
+
   newTuit.likes = 0; // initialize likes counter
   newTuit.liked = false; // initialize liked flag
-  tuits.push(newTuit); // append new tuit to tuits array
-  res.json(newTuit); // respond with new tuit
+
+  // tuits.push(newTuit);
+  const insertedTuit = await tuitsDao
+      .createTuit(insertedTuit);
+
+  res.json(newTuit); // respond with actual inserted tuit
 }
 
-const findTuits = (req, res) =>
+const findTuits = async (req, res) =>
+    const tuits = await tuitsDao.findTuits();
     res.json(tuits);
 
-const updateTuit = (req, res) => {
+const updateTuit = async (req, res) => {
   const tuitdIdToUpdate = req.params.tid; // get ID of tuit to update
   const updates = req.body; // get updates from HTTP body
-  const tuitIndex = tuits.findIndex( // find index of tuit to update
-      (t) => t._id === tuitdIdToUpdate)
-  tuits[tuitIndex] = // update element in tuits array
-      {...tuits[tuitIndex], ...updates}; // merging old tuit w/updates
-  res.sendStatus(200); // OK success status
+  // const tuitIndex = tuits.findIndex((t) => t._id === tuitdIdToUpdate)
+  // tuits[tuitIndex] = {...tuits[tuitIndex], ...updates};
+
+  const status = await tuitsDao // reports success or failure
+      .updateTuit(tuitdIdToUpdate,
+                  updates);
+
+  res.json(status); // respond with status object
 }
 
 
-const deleteTuit = (req, res) => {
+const deleteTuit = async (req, res) => {
   const tuitdIdToDelete = req.params.tid; // retrieve ID of tuit we want to remove
-  tuits = tuits.filter((t) => // filter out tuit from tuits array
-                           t._id !== tuitdIdToDelete);
-  res.sendStatus(200); // OK success status
+  const status = await tuitsDao
+      .deleteTuit(tuitdIdToDelete);
+  // tuits = tuits.filter((t) =>
+                           // t._id !== tuitdIdToDelete);
+  res.json(status); // respond with status object
 }
 
 export default (app) => {
